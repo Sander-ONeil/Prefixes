@@ -30,7 +30,6 @@ prefixes ={
 prefixes2 = {'':1, **{'*10^'+str(x)+' ':10**x  for x in range(-10,10)}}
 
 
-
 print(prefixes2)
 
 for p in range(len(prefixes)):
@@ -47,34 +46,28 @@ mlta = 5
 # I make it global so I can switch the order to give imperial result
 units =  {
     'g':        vec([1,0,0,0,0]),
-    'N':        vec([1,1,-2,0,0]),
-    'lbf':      vec([1,1,-2,0,0]),
-    'Pa':       vec([1,1-2,-2,0,0]),
+    'kg':       vec([1,0,0,0,0]),
     'm':        vec([0,1,0,0,0]),
-    'mile':     vec([0,1,0,0,0]),
-    'ft':       vec([0,1,0,0,0]),
+    'N':        vec([1,1,-2,0,0]),
+    's':        vec([0,0,1,0,0]),
+    'A':        vec([0,0,0,1,0]),
+    'K':        vec([0,0,0,0,1]),
     'm/s':      vec([0,1,-1,0,0]),
-    'c (speed of light)': vec([0,1,-1,0,0]),
-    'mph':      vec([0,1,-1,0,0]),
+    'm^3':      vec([0,3,0,0,0]),
+    'liter':    vec([0,3,0,0,0]),
+    'W':        vec([1,2,-3,0,0]),
+    'Pa':       vec([1,1-2,-2,0,0]),
     'g/m^3':    vec([1,-3,0,0,0]),
     'kg/m^3':   vec([1,-3,0,0,0]),
     'm/s^2':    vec([0,1,-2,0,0]),
     'g_earth':  vec([0,1,-2,0,0]),
-    'kg':       vec([1,0,0,0,0]),
-    'lb_mass':  vec([1,0,0,0,0]),
+    'c (speed of light)': vec([0,1,-1,0,0]),
+    'atm' :     vec([1,1-2,-2,0,0]),
+    'Density of Water':vec([1,-3,0,0,0]),
+    
     'kg/s':     vec([1,-1,0,0,0]),
-    'W':        vec([1,2,-3,0,0]),
-    'hp':       vec([1,2,-3,0,0]),
     'hz':       vec([0,0,-1,0,0]),
-    's':        vec([0,0,1,0,0]),
-    'minute':   vec([0,0,1,0,0]),
-    'hour':     vec([0,0,1,0,0]),
-    'day':      vec([0,0,1,0,0]),
-    'year':     vec([0,0,1,0,0]),
-    'm^3':      vec([0,3,0,0,0]),
-    'liter':    vec([0,3,0,0,0]),
-    'gallon':   vec([0,3,0,0,0]),
-    'A':        vec([0,0,0,1,0]),
+    
     'C':        vec([0,0,1,1,0]),
     'V':        vec([1,2,-3,-1,0]),
     'J':        vec([1,2,-2,0,0]),
@@ -83,8 +76,32 @@ units =  {
     '':         vec([0,0,0,0,0]),
     'H':        vec([1,2,-2,-2,0]),
     'F':        vec([-1,-2,4,2,0]),
-    'heatflux':vec([0,-1,0,0,-1])+vec([1,2,-3,0,0]),#w/m*kelvin
-    'conductivity':vec([0,-2,0,0,0])+vec([1,2,-3,0,0]),#watts/meter^2
+    'degrees':  vec([0,0,0,0,0]),
+    'rotations':vec([0,0,0,0,0]),
+    'lb_mass':  vec([1,0,0,0,0]),
+    'mile':     vec([0,1,0,0,0]),
+    'ft':       vec([0,1,0,0,0]),
+    'lbf':      vec([1,1,-2,0,0]),
+    's':        vec([0,0,1,0,0]),
+    'minute':   vec([0,0,1,0,0]),
+    'hour':     vec([0,0,1,0,0]),
+    'day':      vec([0,0,1,0,0]),
+    'year':     vec([0,0,1,0,0]),
+    
+    'mph':      vec([0,1,-1,0,0]),
+    'gallon':   vec([0,3,0,0,0]),
+    'hp':       vec([1,2,-3,0,0]),
+    'psi':      vec([1,1-2,-2,0,0]),
+    ' ':         vec([0,0,0,0,0]),
+    
+    
+    
+    
+    
+    
+    
+    #'heatflux':vec([0,-1,0,0,-1])+vec([1,2,-3,0,0]),#w/m*kelvin
+    #'conductivity':vec([0,-2,0,0,0])+vec([1,2,-3,0,0]),#watts/meter^2
     }
 
 special_case_grams = ['g','g/m^3']
@@ -92,7 +109,7 @@ special_case_grams = ['g','g/m^3']
 
 special_cases = {'g':.001,'g/m^3':.001,'lbf':4.44822,
     'hp':745.7,'ft':.3048,'lb_mass':0.453592,'g_earth':9.80665,'mph':.44704,'mile':1609.34,
-    'minute':60,'hour':60*60,'day':60*60*24,'year':3.154*10**7, 'c (speed of light)':299792458,'liter':0.001,'gallon':0.00378541,
+    'minute':60,'hour':60*60,'day':60*60*24,'year':3.154*10**7, 'c (speed of light)':299792458,'liter':0.001,'gallon':0.00378541,'Density of Water':999.8395,'atm':101325,'psi':6894.76,'degrees':0.0174533,'rotations':np.pi*2,
 }
 
 
@@ -103,6 +120,8 @@ def find_p(v):
     # v = round(v,6)
     
     if unitmode == 'imperial':
+        if v > .01 and v < 10000:
+            return ''
         for p in list(prefixes2):
         
             c = prefixes2[p]
@@ -115,7 +134,8 @@ def find_p(v):
                 
 
     else:
-    
+        if v > .1 and v < 100:
+            return ''
         for p in list(prefixes):
             
             c = prefixes[p]
@@ -354,28 +374,33 @@ import sys
 if len(sys.argv)>1:
     n = int(sys.argv[1])
 
-imperial_units = {
-    'lbf': vec([1,1,-2,0,0]),
-    'mile': vec([0,1,0,0,0]),
-    'ft': vec([0,1,0,0,0]),
-    'c (speed of light)': vec([0,1,-1,0,0]),
-    'mph': vec([0,1,-1,0,0]),
-    'lb_mass': vec([1,0,0,0,0]),
-    'hp': vec([1,2,-3,0,0]),
-    'minute': vec([0,0,1,0,0]),
-    'hour': vec([0,0,1,0,0]),
-    'day': vec([0,0,1,0,0]),
-    'year': vec([0,0,1,0,0]),
-}
+imperial_units = [
+    'lbf',
+    'mile',
+    'ft',
+    'c (speed of light)',
+    'mph',
+    'lb_mass',
+    'hp',
+    'minute',
+    'hour',
+    'day',
+    'year','gallon','psi'
+]
 
 if 'remove_imperial' in sys.argv:
-    for x in imperial_units.keys():
+    for x in imperial_units:
         units.pop(x)
 
 root = Tk()
-root.minsize(1520,300)
+root.minsize(1620,300)
 frm = ttk.Frame(root, padding=10)
 frm.grid()
+
+
+
+
+
 dpdwn_p=[None]*n
 dpdwn_u=[None]*n
 
@@ -397,7 +422,7 @@ for x in range(0,4):
 for x in range(0,n):
     ttk.Label(frm, text="Term "+str(x)).grid(column=0, row=x+1)
     
-    V[x] = Text(frm,height=1,width=6)
+    V[x] = Text(frm,height=1.1,width=12)
     V[x].grid(column=1,row=x+1)
     V[x].insert(INSERT, '1')
     
@@ -424,12 +449,6 @@ def show0():
     show_lab(0)
 def show1():
     show_lab(1)
-printButton[0] = ttk.Button(frm,
-                        text = "Print",
-                        command = show0).grid(column=5,row=1+0)
-# printButton[1] = ttk.Button(frm,
-#                         text = "Print",
-#                         command = show1).grid(column=5,row=1+1)
 
 
 headers = ['',' ',' ','Imperial / 10^','Metric / SI']
@@ -443,25 +462,18 @@ answer_label.grid(column=3,row=1+n+1)
 alt_answer = ttk.Label(frm,text='')
 alt_answer.grid(column=4,row=1+n+1)
 
-# form_denom = ttk.Label(frm,text='form denomenator')
-# form_denom.grid(column=2,row=2+n+1)
 formula_label = ttk.Label(frm,text='formula')
 formula_label.grid(column=2,row=1+n+1)
 
 
-def multipy_form():
+def multipy_form(event = None):
     
     
     from collections import OrderedDict
     
-    global units, prefixes2, prefixes, unitmode
+    global units, unitmode
     units = OrderedDict(reversed(list(units.items())))
     unitmode = 'imperial'
-    
-    #prefixessave = prefixes2.copy()
-    #prefixes2 = prefixes.copy()
-    #prefixes = prefixes2
-    
     
     L = [get(x) for x in range(n)]
     # print(L)
@@ -494,30 +506,21 @@ def multipy_form():
     units = OrderedDict(reversed(list(units.items())))
     unitmode = 'metric'
     
-    ans = str(round(res[0],5))+res[1]+res[2]
+    ans =' '+ str(round(res[0],5))+res[1]+res[2]+' '
     
     L = [get(x) for x in range(n)]
     res2 = m_d(L)
     
     if res2 != res:
     
-    
-        #ans += ' = ' + str(round(res2[0],5))+res2[1]+res2[2]
-        alt_answer.config(text = str(round(res2[0],5))+res2[1]+res2[2])
+        alt_answer.config(text = ' '+ str(round(res2[0],5))+res2[1]+res2[2]+ ' ')
     else:
         alt_answer.config(text = '')
     # form_denom.config(text = form_d)
     formula_label.config(text = form)
     answer_label.config(text = ans)
-    
-    # print('res',res[2])
-    # if res[2] == 'm^3':
-    
-    #     alt_answer.config(text = 'also equals: ' + str(round(res[0]*1000,5))+res[1]+'Liter')
-    # else:
-    #     alt_answer.config(text = '')
-    
-    
+
+
 def add_term():
     #import os
     import subprocess
@@ -544,28 +547,12 @@ ttk.Button(frm, text="Remove term", command=remove_term    ).grid(column=3, row=
 
 ttk.Button(frm, text="Remove Imperial", command=relaunch_remove_imperial    ).grid(column=4, row=1+1+n+1)
 
-ttk.Button(frm, text="Multiply", command=multipy_form    ).grid(column=1, row=1+n+1)
+
+
+ttk.Button(frm,text="Multiply (press enter)", command=multipy_form,    ).grid(column=1, row=1+n+1,ipadx=10, ipady=30 )
 
 
 
-# def submit():
- 
-#     name=name_var.get()
-    
-# el
-# typed_element = ttk.Entry(frm, command = submit).grid(column = 1, row = 0)
+root.bind('<Return>', multipy_form)
 
-
-
-
-
-# n+=1
-
-
-ttk.Button(frm, text="Quit", command=root.destroy).grid(column=5, row=1+n+2+1)
 root.mainloop()
-
-            
-
-# make_rows(3)
-
